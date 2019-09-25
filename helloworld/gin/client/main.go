@@ -17,7 +17,6 @@ const (
 )
 
 func main () {
-	// Set up a http server.
 	route := gin.Default()
 	route.GET("/api/grpc/:name", func(content *gin.Context) {
 		conn, err := grpc.Dial(rpcAddress, grpc.WithInsecure())
