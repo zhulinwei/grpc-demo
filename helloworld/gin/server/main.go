@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	pb "github.com/zhulinwei/grpc-demo/helloworld/greeter/proto"
 	"google.golang.org/grpc"
@@ -16,8 +15,8 @@ type Greeter struct{}
 type GreeterServer struct{}
 
 const (
-	rpcPort    = ":8080"
-	ginPort    = ":8081"
+	rpcPort = ":8080"
+	ginPort = ":8081"
 )
 
 // 注意需要按照greeter.proto生成后的greeter.pb.go格式传参

@@ -18,9 +18,9 @@ const (
 	ginAddress = "localhost:8081"
 )
 
-type Router struct {}
+type Router struct{}
 
-func (Router) InitGRPCRoute (route *gin.Engine) {
+func (Router) InitGRPCRoute(route *gin.Engine) {
 	conn, err := grpc.Dial(rpcAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal("did not connect: %v", err)
@@ -46,7 +46,7 @@ func (Router) InitGRPCRoute (route *gin.Engine) {
 	})
 }
 
-func (Router) InitHTTPRoute (route *gin.Engine) {
+func (Router) InitHTTPRoute(route *gin.Engine) {
 	route.GET("/api/http/:name", func(ctx *gin.Context) {
 		name := ctx.Param("name")
 		uri := url.URL{
