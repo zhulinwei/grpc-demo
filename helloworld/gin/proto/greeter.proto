@@ -2,18 +2,18 @@ syntax = "proto3";
 
 package greeter;
 
-// The greeting service definition.
+// 定义Greeter服务
 service Greeter {
-  // Sends a greeting
+  // 定义Greeter中SayHello方法
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
-// The request message containing the user's name.
+// 定义请求结构
 message HelloRequest {
   string name = 1;
 }
 
-// The response message containing the greetings
+// 定义响应接口
 message HelloReply {
   string message = 1;
 }

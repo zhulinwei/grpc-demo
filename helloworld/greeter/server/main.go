@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	pb "github.com/zhulinwei/grpc-demo/helloworld/greeter/proto"
 	"google.golang.org/grpc"
 	"log"
@@ -36,4 +37,9 @@ func (GreeterServer) Run() {
 
 func main() {
 	new(GreeterServer).Run()
+
+	route := gin.Default()
+	route.GET("/http", func(ctx *gin.Context) {
+
+	})
 }

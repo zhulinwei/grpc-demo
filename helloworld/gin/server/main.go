@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"net/http"
 )
 
 type Greeter struct{}
@@ -24,7 +25,7 @@ func (g *Greeter) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.Hello
 	return &pb.HelloReply{Message: "Hello " + req.Name}, nil
 }
 
-func (GreeterServer) Run(port string) {
+func (GreeterServer) RunGRPC(port string) {
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -36,11 +37,22 @@ func (GreeterServer) Run(port string) {
 	}
 }
 
-func main() {
-	go func() {
-		new(GreeterServer).Run(rpcPort)
-	}()
-	if err := gin.Default().Run(ginPort); err != nil {
-		fmt.Println(err)
+func (GreeterServer) RunHTTP(port string) {
+	route := gin.Default()
+	route.GET("/http", func(ctx *gin.Context) {
+		name := ctx.Params.ByName("name")
+		fmt.Println(name)
+		ctx.JSON(http.StatusOK, gin.H{
+			"Message": "Hello " + name,
+		})
+	})
+	if err := route.Run(port); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
+}
+
+func main() {
+	greeterServer := new(GreeterServer)
+	go greeterServer.RunGRPC(rpcPort)
+	greeterServer.RunHTTP(ginPort)
 }
