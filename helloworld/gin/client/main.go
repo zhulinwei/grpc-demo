@@ -21,8 +21,10 @@ const (
 type Router struct{}
 
 func (Router) InitGRPCRoute(route *gin.Engine) {
-	conn, err := grpc.Dial(rpcAddress, grpc.WithInsecure())
-	if err != nil {
+	var err error
+	var conn *grpc.ClientConn
+
+	if conn, err = grpc.Dial(rpcAddress, grpc.WithInsecure()); err != nil {
 		log.Fatal("did not connect: %v", err)
 	}
 	greeterClient := pb.NewGreeterClient(conn)
@@ -31,18 +33,13 @@ func (Router) InitGRPCRoute(route *gin.Engine) {
 		name := ctx.Param("name")
 		req := &pb.HelloRequest{Name: name}
 
-		result, err := greeterClient.SayHello(ctx, req)
-		fmt.Println(result)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
+		var result *pb.HelloReply
+		if result, err = greeterClient.SayHello(ctx, req); err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(),})
 			return
 		}
-		fmt.Println(result)
-		ctx.JSON(http.StatusOK, gin.H{
-			"result": fmt.Sprint(result.Message),
-		})
+
+		ctx.JSON(http.StatusOK, gin.H{"result": fmt.Sprint(result.Message),})
 	})
 }
 
@@ -79,8 +76,6 @@ func (Router) InitHTTPRoute(route *gin.Engine) {
 		}
 		var obj Body
 		err = json.Unmarshal(body, &obj)
-		fmt.Println(obj.Message)
-		fmt.Println(string(body))
 		ctx.JSON(http.StatusOK, gin.H{
 			"result": obj.Message,
 		})
