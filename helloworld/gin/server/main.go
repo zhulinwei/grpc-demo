@@ -40,8 +40,7 @@ func (GreeterServer) RunGRPC(port string) {
 func (GreeterServer) RunHTTP(port string) {
 	route := gin.Default()
 	route.GET("/http", func(ctx *gin.Context) {
-		name := ctx.Params.ByName("name")
-		fmt.Println(name)
+		name := ctx.Query("name")
 		ctx.JSON(http.StatusOK, gin.H{
 			"Message": "Hello " + name,
 		})

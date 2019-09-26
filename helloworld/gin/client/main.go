@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	pb "github.com/zhulinwei/grpc-demo/helloworld/gin/proto"
@@ -17,15 +18,15 @@ const (
 	ginAddress = "localhost:8081"
 )
 
-func main() {
+type Router struct {}
 
+func (Router) InitGRPCRoute (route *gin.Engine) {
 	conn, err := grpc.Dial(rpcAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal("did not connect: %v", err)
 	}
 	greeterClient := pb.NewGreeterClient(conn)
 
-	route := gin.Default()
 	route.GET("/api/grpc/:name", func(ctx *gin.Context) {
 		name := ctx.Param("name")
 		req := &pb.HelloRequest{Name: name}
@@ -38,21 +39,22 @@ func main() {
 			})
 			return
 		}
+		fmt.Println(result)
 		ctx.JSON(http.StatusOK, gin.H{
 			"result": fmt.Sprint(result.Message),
 		})
 	})
+}
 
+func (Router) InitHTTPRoute (route *gin.Engine) {
 	route.GET("/api/http/:name", func(ctx *gin.Context) {
-		fmt.Println("come in1")
 		name := ctx.Param("name")
 		uri := url.URL{
 			Scheme:   "http",
 			Host:     ginAddress,
 			Path:     "/http",
-			RawQuery: "name" + name,
+			RawQuery: "name=" + name,
 		}
-		fmt.Println(uri.String())
 		var err error
 		var response *http.Response
 		if response, err = http.Get(uri.String()); err != nil {
@@ -72,11 +74,24 @@ func main() {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		type Body struct {
+			Message string
+		}
+		var obj Body
+		err = json.Unmarshal(body, &obj)
+		fmt.Println(obj.Message)
+		fmt.Println(string(body))
 		ctx.JSON(http.StatusOK, gin.H{
-			"result": string(body),
+			"result": obj.Message,
 		})
 	})
+}
 
+func main() {
+	route := gin.Default()
+	router := new(Router)
+	router.InitGRPCRoute(route)
+	router.InitHTTPRoute(route)
 	if err := route.Run(port); err != nil {
 		log.Fatal("gin run fail: %v", err)
 	}
