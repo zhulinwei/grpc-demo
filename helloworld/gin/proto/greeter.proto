@@ -15,5 +15,24 @@ message HelloRequest {
 
 // 定义响应接口
 message HelloReply {
-  string message = 1;
+  string replyValue1 = 1;
+  string replyValue2 = 2;
+  string replyValue3 = 3;
+  string replyValue4 = 4;
+  string replyValue5 = 5;
+  string replyValue6 = 6;
+  string replyValue7 = 7;
+  string replyValue8 = 8;
+  string replyValue9 = 9;
+  string replyValue10 = 10;
+  string replyValue11 = 11;
+  string replyValue12 = 12;
+  string replyValue13 = 13;
+  string replyValue14 = 14;
+  string replyValue15 = 15;
+  string replyValue16 = 16;
+  string replyValue17 = 17;
+  string replyValue18 = 18;
+  string replyValue19 = 19;
+  string replyValue20 = 20;
 }
