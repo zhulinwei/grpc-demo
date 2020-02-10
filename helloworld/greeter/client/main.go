@@ -12,8 +12,9 @@ import (
 type GreeterClient struct{}
 
 const (
-	port    = ":8080"
-	address = "localhost:8080"
+  // port    = ":8080"
+	port    = ":3001"
+	address = "localhost:3001"
 )
 
 func (GreeterClient) Run() {

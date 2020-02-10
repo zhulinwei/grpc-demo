@@ -1,6 +1,7 @@
 package main
 
 import (
+  "fmt"
 	"context"
 	"github.com/gin-gonic/gin"
 	pb "github.com/zhulinwei/grpc-demo/helloworld/greeter/proto"
@@ -20,11 +21,13 @@ const (
 
 // 注意需要按照greeter.proto生成后的greeter.pb.go格式传参
 func (g *Greeter) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+  fmt.Println("come in")
 	return &pb.HelloReply{Message: "Hello"}, nil
 }
 
 func (GreeterServer) Run() {
 	listener, err := net.Listen("tcp", port)
+  fmt.Println(port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
