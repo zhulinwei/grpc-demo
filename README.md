@@ -377,3 +377,7 @@ func main () {
 
 通过调用/api/grpc/:name接口，客户端可通过gRPC的方式获取对应的结果。
 
+## 参考
+1. https://grpc.io/docs/quickstart/go/
+2. https://developers.google.com/protocol-buffers/docs/gotutorial
+2. https://chai2010.gitbooks.io/advanced-go-programming-book/content/ch4-rpc/readme.html
